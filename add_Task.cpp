@@ -1,12 +1,7 @@
 #include "add_Task.h"
 
 baseTask::baseTask(Date date, const std::string& task, bool done) : dueDate(date), task(task), haveDone(done) {
-    std::time_t t = std::time(nullptr);
-    std::tm* now = std::localtime(&t);
-    int currentDay = now->tm_mday;
-    int currentMonth = now->tm_mon + 1; // tm_mon is 0
-    int currentYear = now->tm_year + 1900; // tm_year is years since 1900
-    Date today = Date(currentDay, currentMonth, currentYear);
+    Date today;
     if(today > dueDate) {
         isDue = true;
     } 
@@ -15,12 +10,7 @@ baseTask::baseTask(Date date, const std::string& task, bool done) : dueDate(date
     }
 }
 baseTask::baseTask(Date date, const std::string& task) : dueDate(date), task(task) {
-    std::time_t t = std::time(nullptr);
-    std::tm* now = std::localtime(&t);
-    int currentDay = now->tm_mday;
-    int currentMonth = now->tm_mon + 1; // tm_mon is 0
-    int currentYear = now->tm_year + 1900; // tm_year is years since 1900
-    Date today = Date(currentDay, currentMonth, currentYear);
+    Date today;
     if(today > dueDate) {
         isDue = true;
     } 
@@ -30,12 +20,7 @@ baseTask::baseTask(Date date, const std::string& task) : dueDate(date), task(tas
     haveDone = false;
 }
 baseTask::baseTask(int day, int month, int year, const std::string& task) : dueDate(day, month, year), task(task) {
-    std::time_t t = std::time(nullptr);
-    std::tm* now = std::localtime(&t);
-    int currentDay = now->tm_mday;
-    int currentMonth = now->tm_mon + 1; // tm_mon is 0
-    int currentYear = now->tm_year + 1900; // tm_year is years since 1900
-    Date today = Date(currentDay, currentMonth, currentYear);
+    Date today;
     if(today > dueDate) {
         isDue = true;
     } 
