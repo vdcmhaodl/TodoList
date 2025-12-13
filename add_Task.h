@@ -28,6 +28,7 @@ public:
     dailyTask(Date date, const std::string& task, bool done) : baseTask(date, task, done) {}
     dailyTask(Date date, const std::string& task) : baseTask(date, task) {}
     dailyTask(int day, int month, int year, const std::string& task) : baseTask(day, month, year, task) {}
+    dailyTask(const std::string& task) : baseTask(Date(), task) {}
     void checkRefresh() override;
 };
 class oneTimeTask : public baseTask {

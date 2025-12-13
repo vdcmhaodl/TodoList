@@ -1,106 +1,221 @@
+// To-do List - Interactive CLI AI generated for testing
+#include "logic.h"
 #include "add_Task.h"
 #include <iostream>
-#include <vector>
-#include <iomanip> // Thư viện để căn lề bảng (frontend)
+#include <string>
+#include <limits>
 
-// Một số mã màu để làm đẹp (Frontend)
-const std::string RESET = "\033[0m";
-const std::string RED = "\033[31m";
-const std::string GREEN = "\033[32m";
-const std::string YELLOW = "\033[33m";
-const std::string BOLD = "\033[1m";
-
-void printLine(int width) {
-    std::cout << "  +" << std::string(width - 4, '-') << "+\n";
+void displayMenu() {
+    std::cout << "\n========== TO-DO LIST MENU ==========" << std::endl;
+    std::cout << "1. Add a new task" << std::endl;
+    std::cout << "2. Display all tasks" << std::endl;
+    std::cout << "3. Delete a task" << std::endl;
+    std::cout << "4. Mark task as done" << std::endl;
+    std::cout << "5. Check due tasks" << std::endl;
+    std::cout << "8. Exit" << std::endl;
+    std::cout << "=====================================" << std::endl;
+    std::cout << "Enter your choice (1-8): ";
 }
 
-void showHeader() {
-    std::cout << "\n  " << BOLD << "MY TODO LIST" << RESET << "\n";
-    printLine(60);
-    std::cout << "  | " << std::left << std::setw(4) << "ID"
-              << "| " << std::setw(25) << "Task Name"
-              << "| " << std::setw(12) << "Due Date"
-              << "| " << std::setw(10) << "Status" << " |\n";
-    printLine(60);
+void displayTaskTypeMenu() {
+    std::cout << "\n--- Select Task Type ---" << std::endl;
+    std::cout << "1. One-Time Task (specific due date)" << std::endl;
+    std::cout << "2. Daily Task (repeats every day)" << std::endl;
+    std::cout << "Enter your choice (1-2): ";
 }
 
-void showTasks(const std::vector<baseTask*>& list) {
-    if (list.empty()) {
-        std::cout << "  | " << std::setw(54) << "No tasks yet! Let's add some." << " |\n";
-    } else {
-        for (size_t i = 0; i < list.size(); ++i) {
-            std::string status = list[i]->getHaveDone() ? (GREEN + "DONE" + RESET) : (list[i]->getIsDue() ? (RED + "LATE" + RESET) : (YELLOW + "TODO" + RESET));
-            
-            // Tính toán độ dài chuỗi thực tế để căn chỉnh vì mã màu làm lệch setw
-            int padding = list[i]->getHaveDone() ? 9 : 0; 
-
-            std::cout << "  | " << std::left << std::setw(4) << i + 1
-                      << "| " << std::setw(25) << list[i]->getTask()
-                      << "| " << std::setw(12) << list[i]->getDueDate().getDate()
-                      << "| " << std::setw(10 + padding) << status << " |\n";
-        }
+void displayTasks(const Platform& platform) {
+    const auto& tasks = platform.getTasks();
+    
+    if (tasks.empty()) {
+        std::cout << "\nNo tasks in the list." << std::endl;
+        return;
     }
-    printLine(60);
+    
+    std::cout << "\n========== YOUR TASKS ==========" << std::endl;
+    std::cout << std::string(70, '-') << std::endl;
+    std::cout << "No. | Task Name                     | Due Date   | Type  | Status" << std::endl;
+    std::cout << std::string(70, '-') << std::endl;
+    
+    for (size_t i = 0; i < tasks.size(); ++i) {
+        std::string status = tasks[i]->getHaveDone() ? "Done" : "Pending";
+        std::string dueStatus = tasks[i]->getIsDue() ? "[OVERDUE]" : "";
+        
+        // Determine task type using RTTI
+        std::string taskType = (dynamic_cast<dailyTask*>(tasks[i]) != nullptr) ? "Daily" : "Once";
+        
+        std::cout << (i + 1) << "   | " 
+                  << tasks[i]->getTask().substr(0, 27) << std::string(27 - std::min(size_t(27), tasks[i]->getTask().length()), ' ')
+                  << " | " << tasks[i]->getDueDate().getDate() 
+                  << " | " << taskType << " | " << status << " " << dueStatus << std::endl;
+    }
+    std::cout << std::string(70, '-') << std::endl;
 }
 
 int main() {
-    std::vector<baseTask*> todoList;
-    int choice;
+    Platform platform;
+    int choice = 0;
+    
+    std::cout << "============================================" << std::endl;
+    std::cout << "  Welcome to the Interactive To-Do List CLI" << std::endl;
+    std::cout << "============================================" << std::endl;
 
+    std::cout << "\n--- Load Data ---" << std::endl;
+    std::string filename = "tasks.txt";
+    
+    try {
+        platform.loadData(filename);
+        std::cout << "✓ Data loaded successfully from " << filename << std::endl;
+    } catch (const std::exception& e) {
+        std::cout << "✗ Error loading data: " << e.what() << std::endl;
+    }
     while (true) {
-        // Clear màn hình (tuỳ hệ điều hành, system("cls") cho Win, "clear" cho Mac/Linux)
-        // std::cout << "\033[2J\033[1;1H"; 
-        for (auto& task : todoList) {
-            task->checkRefresh();
-        }
-        showHeader();
-        showTasks(todoList);
+        displayMenu();
+        std::cin >> choice;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-        std::cout << "\n  [1] Add daily Task  [2] Add one-time Task  [3] Mark Done  [0] Exit\n";
-        std::cout << "  Select option: ";
-        if (!(std::cin >> choice)) {
-            std::cin.clear();
-            std::cin.ignore(1000, '\n');
-            continue;
-        }
+        switch (choice) {
+            case 1: {
+                // Add a new task
+                std::cout << "\n--- Add New Task ---" << std::endl;
+                displayTaskTypeMenu();
+                int taskTypeChoice;
+                std::cin >> taskTypeChoice;
 
-        if (choice == 0) break;
-
-        if (choice == 1) {
-            std::cin.ignore(); // Xóa bộ nhớ đệm
-            std::string name;
-            Date date = Date();
-            
-            std::cout << "\n  Enter task name: ";
-            std::getline(std::cin, name);
-            dailyTask* newTask = new dailyTask(date, name);
-            todoList.push_back(newTask);
-            std::cout << "  " << GREEN << "Task added successfully!" << RESET << "\n";
-        }
-        else if (choice == 2) {
-            std::cin.ignore();
-            std::string name;
-            Date date;
-            
-            std::cout << "\n  Enter task name: ";
-            std::getline(std::cin, name);
-            std::cout << "  Enter due date (dd/mm/yyyy): ";
-            std::cin >> date;
-            
-            oneTimeTask* newTask = new oneTimeTask(date, name);
-            todoList.push_back(newTask);
-            std::cout << "  " << GREEN << "Task added successfully!" << RESET << "\n";
-        }
-        else if (choice == 3) {
-            int id;
-            std::cout << "  Enter ID to mark done: ";
-            std::cin >> id;
-            if (id > 0 && id <= (int)todoList.size()) {
-                todoList[id - 1]->setHaveDone();
-                std::cout << "  " << GREEN << "Great job! Task completed." << RESET << "\n";
-            } else {
-                std::cout << "  " << RED << "Invalid ID!" << RESET << "\n";
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::string description;
+                std::cout << "Enter task description: ";
+                std::getline(std::cin, description);
+                baseTask* newTask = nullptr;
+                if (taskTypeChoice == 1) {
+                    int day, month, year;
+                    
+                    std::cout << "Enter day (1-31): ";
+                    std::cin >> day;
+                    
+                    std::cout << "Enter month (1-12): ";
+                    std::cin >> month;
+                    
+                    std::cout << "Enter year: ";
+                    std::cin >> year;
+                    newTask = new oneTimeTask(day, month, year, description);
+                } else if (taskTypeChoice == 2) {
+                    newTask = new dailyTask(description);
+                } else {
+                    std::cout << "\n✗ Invalid task type! Task not added." << std::endl;
+                    break;
+                }
+                
+                if (newTask->isValid()) {
+                    platform.addTask(newTask);
+                    std::cout << "\n✓ Task added successfully!" << std::endl;
+                } else {
+                    std::cout << "\n✗ Invalid date! Task not added." << std::endl;
+                    delete newTask;
+                }
+                break;
             }
+            
+            case 2: {
+                // Display all tasks
+                displayTasks(platform);
+                break;
+            }
+            
+            case 3: {
+                // Delete a task
+                const auto& tasks = platform.getTasks();
+                
+                if (tasks.empty()) {
+                    std::cout << "\nNo tasks to delete." << std::endl;
+                    break;
+                }
+                
+                displayTasks(platform);
+                std::cout << "Enter task number to delete (0 to cancel): ";
+                int taskNum;
+                std::cin >> taskNum;
+                
+                if (taskNum > 0 && taskNum <= (int)tasks.size()) {
+                    platform.deleteTask(taskNum - 1);
+                    std::cout << "✓ Task deleted successfully!" << std::endl;
+                } else if (taskNum != 0) {
+                    std::cout << "✗ Invalid task number." << std::endl;
+                }
+                break;
+            }
+            
+            case 4: {
+                // Mark task as done
+                const auto& tasks = platform.getTasks();
+                
+                if (tasks.empty()) {
+                    std::cout << "\nNo tasks available." << std::endl;
+                    break;
+                }
+                
+                displayTasks(platform);
+                std::cout << "Enter task number to mark as done (0 to cancel): ";
+                int taskNum;
+                std::cin >> taskNum;
+                
+                if (taskNum > 0 && taskNum <= (int)tasks.size()) {
+                    tasks[taskNum - 1]->setHaveDone();
+                    std::cout << "✓ Task marked as done!" << std::endl;
+                } else if (taskNum != 0) {
+                    std::cout << "✗ Invalid task number." << std::endl;
+                }
+                break;
+            }
+            
+            case 5: {
+                // Check due tasks
+                std::cout << "\n--- Checking Due Status ---" << std::endl;
+                const auto& tasks = platform.getTasks();
+                
+                int overdueCount = 0;
+                for (auto task : tasks) {
+                    if (task->getIsDue()) {
+                        overdueCount++;
+                        std::cout << "⚠ OVERDUE: " << task->getTask() 
+                                  << " (Due: " << task->getDueDate().getDate() << ")" << std::endl;
+                    }
+                }
+                
+                if (overdueCount == 0) {
+                    std::cout << "✓ No overdue tasks!" << std::endl;
+                }
+                break;
+            }
+            
+            case 6: {
+                // Save data to file
+                
+                break;
+            }
+            
+            case 7: {
+                // Load data from file
+                
+                break;
+            }
+            
+            case 8: {
+                std::cout << "\n--- Save Data ---" << std::endl;
+                std::string filename = "tasks.txt";
+                
+                try {
+                    platform.saveData(filename);
+                    std::cout << "✓ Data saved successfully to " << filename << std::endl;
+                } catch (const std::exception& e) {
+                    std::cout << "✗ Error saving data: " << e.what() << std::endl;
+                }
+                std::cout << "\nThank you for using To-Do List CLI. Goodbye!" << std::endl;
+                return 0;
+            }
+            
+            default:
+                std::cout << "\n✗ Invalid choice. Please enter a number between 1 and 8." << std::endl;
         }
     }
 
