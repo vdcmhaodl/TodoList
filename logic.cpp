@@ -58,7 +58,7 @@ void Platform::loadData(const std::string& filename) {
         dateStream >> day >> sep >> month >> sep >> year;
         baseTask* loadedTask = nullptr;
         if (taskTypeStr == "daily") {
-            loadedTask = new dailyTask(taskName);
+            loadedTask = new dailyTask(day, month, year,taskName);
         } 
         else {
             loadedTask = new oneTimeTask(day, month, year, taskName);

@@ -18,7 +18,7 @@ public:
     bool getIsDue() const;
     void setIsDue();
     bool getHaveDone() const;
-    virtual void checkRefresh();
+    virtual void checkRefresh() = 0;
     void setHaveDone();
     virtual ~baseTask() = default;
 };
@@ -36,4 +36,5 @@ public:
     oneTimeTask(Date date, const std::string& task, bool done) : baseTask(date, task, done) {}
     oneTimeTask(Date date, const std::string& task) : baseTask(date, task) {}
     oneTimeTask(int day, int month, int year, const std::string& task) : baseTask(day, month, year, task) {}
+    void checkRefresh() override;
 };

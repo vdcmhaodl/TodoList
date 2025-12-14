@@ -50,7 +50,6 @@ bool baseTask::getHaveDone() const {
 void baseTask::setHaveDone() {
     haveDone = true;
 }
-void baseTask::checkRefresh() {}
 void dailyTask::checkRefresh() {
     Date today;
 
@@ -58,4 +57,6 @@ void dailyTask::checkRefresh() {
         dueDate = today;
         haveDone = false;
     }
+}
+void oneTimeTask::checkRefresh() {
 }
