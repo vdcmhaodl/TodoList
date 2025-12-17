@@ -77,6 +77,10 @@ void MainWindow::setupConnections()
 void MainWindow::onAddTaskClicked()
 {
     QString taskText = ui->lineEdit->text();
+    if(taskText.isEmpty()) {
+        QMessageBox::warning(this, "Warning", "Please enter a task!");
+        return;
+    }
     QDate selectedDate = ui->dateEdit->date();
     QString taskType = ui->comboBox->currentText();
     
