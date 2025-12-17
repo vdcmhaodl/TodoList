@@ -12,7 +12,7 @@ void displayMenu() {
     std::cout << "3. Delete a task" << std::endl;
     std::cout << "4. Mark task as done" << std::endl;
     std::cout << "5. Check due tasks" << std::endl;
-    std::cout << "8. Exit" << std::endl;
+    std::cout << "6. Exit" << std::endl;
     std::cout << "=====================================" << std::endl;
     std::cout << "Enter your choice (1-8): ";
 }
@@ -187,20 +187,7 @@ int main() {
                 }
                 break;
             }
-            
             case 6: {
-                // Save data to file
-                
-                break;
-            }
-            
-            case 7: {
-                // Load data from file
-                
-                break;
-            }
-            
-            case 8: {
                 std::cout << "\n--- Save Data ---" << std::endl;
                 std::string filename = "tasks.txt";
                 
