@@ -4,14 +4,15 @@ A modern, feature-rich to-do list application built with Qt 6.9.1 and C++17. Man
 
 ## Features
 
-- ✅ **Add Tasks**: Create one-time or daily recurring tasks
-- 📅 **Date Picker**: Select task due dates with an interactive calendar
-- ✔️ **Mark Done**: Mark tasks as complete with a single click
-- 🗑️ **Delete Tasks**: Remove tasks from your list
-- 💾 **Auto-save**: Tasks are automatically saved to a file
-- 📊 **Task View**: Display tasks in a table with columns for name, date, type, and status
-- 🔄 **Daily Tasks**: Automatically refresh daily tasks each day
-- 📱 **Responsive UI**: User-friendly interface with proper spacing and text wrapping
+- **Add Tasks**: Create one-time or daily recurring tasks
+- **Date Picker**: Select task due dates with an interactive calendar
+- **Mark Done**: Mark tasks as complete with a single click
+- **Delete Tasks**: Remove tasks from your list
+- **Auto-save**: Tasks are automatically saved to a file
+- **Task View**: Display tasks in a table with columns for name, date, type, and status
+- **Daily Tasks**: Automatically refresh daily tasks each day
+- **Responsive UI**: User-friendly interface with proper spacing and text wrapping
+- **Time in Day**: Handle specific time in a day to be more flexible in doing tasks
 
 ## System Requirements
 
