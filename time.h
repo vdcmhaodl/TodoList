@@ -17,4 +17,6 @@ public:
     int getDays() const;
     void TimeLogic();
     std::string toString() const;
+
+    bool operator<(const Time& other) const;
 };

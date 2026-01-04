@@ -18,5 +18,6 @@ public:
     friend Date& operator++(const Date& other, int);
     friend std::istream& operator>>(std::istream& in, Date& date);
     bool operator>=(const Date& other) const;
+    bool operator==(const Date& other) const;
     bool operator>(const Date& other) const;
 };

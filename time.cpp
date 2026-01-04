@@ -37,11 +37,19 @@ void Time::TimeLogic() {
         minutes += borrow * 60;
     }
     if (hours >= 24) {
-        hours = hours % 24;
         days += hours / 24;
+        hours = hours % 24;
     } else if (hours < 0) {
-        hours = (hours % 24 + 24) % 24;
+        int dayBorrow = (-hours + 23) / 24;
+        days -= dayBorrow;
+        hours += dayBorrow * 24;
     }
+}
+bool Time::operator<(const Time& other) const {
+    if (days != other.days) return days < other.days;
+    if (hours != other.hours) return hours < other.hours;
+    if (minutes != other.minutes) return minutes < other.minutes;
+    return seconds < other.seconds;
 }
 std::string Time::toString() const {
     char buffer[9];

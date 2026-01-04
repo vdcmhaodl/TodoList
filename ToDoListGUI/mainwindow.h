@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QStandardItemModel>
 #include "../logic.h"
+#include "../time.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -35,5 +36,6 @@ private:
     void saveTasks();
     void refreshTaskDisplay();
     void setupConnections();
+    Time getTimeFromUI() const;
 };
 #endif // MAINWINDOW_H

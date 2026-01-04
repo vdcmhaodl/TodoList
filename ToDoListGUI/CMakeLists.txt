@@ -25,6 +25,8 @@ set(PROJECT_SOURCES
         ../add_Task.h
         ../handle_date.cpp
         ../handle_date.h
+        ../time.cpp
+        ../time.h
         ${TS_FILES}
 )
 

@@ -15,15 +15,16 @@ MainWindow::MainWindow(QWidget *parent)
     
     // Initialize the task model for the table view
     taskModel = new QStandardItemModel(this);
-    taskModel->setHorizontalHeaderLabels({"Task", "Due Date", "Type", "Status"});
+    taskModel->setHorizontalHeaderLabels({"Task", "Due Date", "Time", "Type", "Status"});
     ui->ListTask->setModel(taskModel);
     
     // Configure table columns
     ui->ListTask->horizontalHeader()->setStretchLastSection(false);
-    ui->ListTask->setColumnWidth(0, 300);  // Task name - wider
-    ui->ListTask->setColumnWidth(1, 120);  // Due date
-    ui->ListTask->setColumnWidth(2, 100);  // Type
-    ui->ListTask->setColumnWidth(3, 150);  // Status
+    ui->ListTask->setColumnWidth(0, 250);  // Task name
+    ui->ListTask->setColumnWidth(1, 100);  // Due date
+    ui->ListTask->setColumnWidth(2, 80);   // Time
+    ui->ListTask->setColumnWidth(3, 80);   // Type
+    ui->ListTask->setColumnWidth(4, 150);  // Status
     
     // Enable scrolling
     ui->ListTask->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -74,6 +75,14 @@ void MainWindow::setupConnections()
             this, &MainWindow::onTaskTypeChanged);
 }
 
+Time MainWindow::getTimeFromUI() const
+{
+    int hours = ui->hoursSpinBox->value();
+    int minutes = ui->minutesSpinBox->value();
+    int seconds = ui->secondsSpinBox->value();
+    return Time(hours, minutes, seconds);
+}
+
 void MainWindow::onAddTaskClicked()
 {
     QString taskText = ui->lineEdit->text();
@@ -83,6 +92,7 @@ void MainWindow::onAddTaskClicked()
     }
     QDate selectedDate = ui->dateEdit->date();
     QString taskType = ui->comboBox->currentText();
+    Time estimatedTime = getTimeFromUI();
     
     if (taskText.isEmpty()) {
         QMessageBox::warning(this, "Warning", "Please enter a task!");
@@ -94,16 +104,14 @@ void MainWindow::onAddTaskClicked()
     
     if (taskType == "Daily Task") {
         newTask = new dailyTask(
-            selectedDate.day(),
-            selectedDate.month(),
-            selectedDate.year(),
+            Date(selectedDate.day(), selectedDate.month(), selectedDate.year()),
+            estimatedTime,
             taskText.toStdString()
         );
     } else {
         newTask = new oneTimeTask(
-            selectedDate.day(),
-            selectedDate.month(),
-            selectedDate.year(),
+            Date(selectedDate.day(), selectedDate.month(), selectedDate.year()),
+            estimatedTime,
             taskText.toStdString()
         );
     }
@@ -112,6 +120,9 @@ void MainWindow::onAddTaskClicked()
         platform.addTask(newTask);
         refreshTaskDisplay();
         ui->lineEdit->clear();
+        ui->hoursSpinBox->setValue(0);
+        ui->minutesSpinBox->setValue(0);
+        ui->secondsSpinBox->setValue(0);
         QMessageBox::information(this, "Success", "Task added successfully!");
     } else {
         delete newTask;
@@ -168,6 +179,15 @@ void MainWindow::refreshTaskDisplay()
         QString dateStr = QString::fromStdString(dueDate.getDate());
         QStandardItem *dateItem = new QStandardItem(dateStr);
         row.append(dateItem);
+        
+        // Estimated time
+        Time est = task->getEstimatedTime();
+        QString timeStr = QString("%1:%2:%3")
+            .arg(est.getHours(), 2, 10, QLatin1Char('0'))
+            .arg(est.getMinutes(), 2, 10, QLatin1Char('0'))
+            .arg(est.getSeconds(), 2, 10, QLatin1Char('0'));
+        QStandardItem *timeItem = new QStandardItem(timeStr);
+        row.append(timeItem);
         
         // Task type
         std::string taskType = (dynamic_cast<dailyTask*>(task) != nullptr) ? "Daily" : "One-Time";

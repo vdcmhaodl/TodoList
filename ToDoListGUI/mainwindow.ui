@@ -111,6 +111,76 @@
      <string>One-time Task</string>
     </property>
    </widget>
+   <widget class="QLabel" name="timeLabel">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>560</y>
+      <width>100</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Estimated Time:</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="hoursSpinBox">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>560</y>
+      <width>60</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <number>0</number>
+    </property>
+    <property name="maximum">
+     <number>23</number>
+    </property>
+    <property name="suffix">
+     <string> h</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="minutesSpinBox">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>560</y>
+      <width>60</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <number>0</number>
+    </property>
+    <property name="maximum">
+     <number>59</number>
+    </property>
+    <property name="suffix">
+     <string> m</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="secondsSpinBox">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>560</y>
+      <width>60</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <number>0</number>
+    </property>
+    <property name="maximum">
+     <number>59</number>
+    </property>
+    <property name="suffix">
+     <string> s</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
