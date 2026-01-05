@@ -139,6 +139,9 @@
     <property name="maximum">
      <number>23</number>
     </property>
+    <property name="wrapping">
+     <bool>true</bool>
+    </property>
     <property name="suffix">
      <string> h</string>
     </property>
@@ -158,6 +161,9 @@
     <property name="maximum">
      <number>59</number>
     </property>
+    <property name="wrapping">
+     <bool>true</bool>
+    </property>
     <property name="suffix">
      <string> m</string>
     </property>
@@ -176,6 +182,9 @@
     </property>
     <property name="maximum">
      <number>59</number>
+    </property>
+    <property name="wrapping">
+     <bool>true</bool>
     </property>
     <property name="suffix">
      <string> s</string>
